@@ -4,14 +4,17 @@ import './App.css';
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import Landing from "./pages/landing-page/views/Landing";
+import Navbar from "./pages/components/nav-bar/navbar";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/landing" element={<Landing />} />
-      <Route path="*" element={<Navigate to="/landing" />} />
-    </Routes>
+    <>
+      <Navbar/>
+      <Routes>
+        {/* <Route path="/landing" element={<Landing />} />
+        <Route path="*" element={<Navigate to="/landing" />} /> */}
+      </Routes>
+    </>
   );
 }
 
