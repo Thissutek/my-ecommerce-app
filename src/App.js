@@ -5,14 +5,14 @@ import './App.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import Navbar from "./pages/components/nav-bar/navbar";
+import Heropage from "./pages/heroPage/heroPage";
 
 function App() {
   return (
     <>
       <Navbar/>
       <Routes>
-        {/* <Route path="/landing" element={<Landing />} />
-        <Route path="*" element={<Navigate to="/landing" />} /> */}
+        <Route path="/" element={<Heropage/>}></Route>
       </Routes>
     </>
   );
