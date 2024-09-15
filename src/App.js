@@ -6,6 +6,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import Navbar from "./pages/components/nav-bar/navbar";
 import Heropage from "./pages/heroPage/heroPage";
+import ProductPage from "./pages/productPage/productPage";
+import ProductList from "./pages/components/productList/productList";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element={<Heropage/>}></Route>
+        <Route path='/products' element = {<ProductList />}></Route>
+        <Route path='/product/:productId' element={ <ProductPage />}></Route>
       </Routes>
     </>
   );
