@@ -16,7 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Heropage/>}></Route>
         <Route path='/products' element = {<ProductList />}></Route>
-        <Route path='/product/:productId' element={ <ProductPage />}></Route>
+        <Route path='/products/:productId' element={ <ProductPage />}></Route>
+        <Route path="*" element={<div>404 Not Found</div>}></Route>
       </Routes>
     </>
   );
