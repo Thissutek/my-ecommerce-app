@@ -15,24 +15,33 @@ import {
 import {
   ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
   SquaresPlusIcon,
   XMarkIcon,
+  TagIcon,
+  ShoppingBagIcon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 
+
+
 const products = [
-  { name: 'New Arrivals', description: 'New Seasonal Catalog', href: '#', icon: ChartPieIcon },
-  { name: 'Tees', description: 'Fresh Designs, Everyday Comfort. ', href: '#', icon: CursorArrowRaysIcon },
-  { name: 'Hoodies', description: 'Hoodies for Every Mood', href: '#', icon: FingerPrintIcon },
-  { name: 'Outerwear', description: 'Layer Up in Style', href: '#', icon: SquaresPlusIcon },
-  { name: 'Accessories', description: 'Small Details, Big Impact', href: '#', icon: ArrowPathIcon },
+  { name: 'New Arrivals', description: 'New Seasonal Catalog', href: '/products', icon: TagIcon },
+  { name: 'Tees', description: 'Fresh Designs, Everyday Comfort. ', href: '/products', icon: CursorArrowRaysIcon },
+  { name: 'Hoodies', description: 'Hoodies for Every Mood', href: '/products', icon: FingerPrintIcon },
+  { name: 'Outerwear', description: 'Layer Up in Style', href: '/products', icon: SquaresPlusIcon },
+  { name: 'Accessories', description: 'Small Details, Big Impact', href: '/products', icon: ArrowPathIcon },
 ]
 const callsToAction = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
   { name: 'Support', href: '#', icon: PhoneIcon },
+]
+
+const profile = [
+  {name: 'Shopping Bag', href: '/', icon: ShoppingBagIcon },
+  {name: 'Log In', href: '/login', icon: UserCircleIcon },
 ]
 
 export default function Navbar() {
@@ -42,7 +51,7 @@ export default function Navbar() {
     <header className="bg-white z-50 relative">
       <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
             <img alt="" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" className="h-8 w-auto" />
           </a>
@@ -102,20 +111,21 @@ export default function Navbar() {
             </PopoverPanel>
           </Popover>
 
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Sale
+          <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
+            Sales
           </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Marketplace
-          </a>
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Company
+          <a href="/" className="text-sm font-semibold leading-6 text-gray-900">
+            Support
           </a>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          {profile.map((item) => (
+              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
+              <item.icon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+              <span>{item.name}</span>
+            </a>
+          ))}
+
         </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -170,21 +180,7 @@ export default function Navbar() {
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  Marketplace
-                </a>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Company
-                </a>
-              </div>
-              <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
+                  Support
                 </a>
               </div>
             </div>

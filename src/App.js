@@ -8,6 +8,7 @@ import Navbar from "./pages/components/nav-bar/navbar";
 import Heropage from "./pages/heroPage/heroPage";
 import ProductPage from "./pages/productPage/productPage";
 import ProductList from "./pages/components/productList/productList";
+import LoginForm from "./pages/loginPage/loginPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Heropage/>}></Route>
         <Route path='/products' element = {<ProductList />}></Route>
         <Route path='/products/:productId' element={ <ProductPage />}></Route>
+        <Route path='/login' element={<LoginForm />}></Route>
         <Route path="*" element={<div>404 Not Found</div>}></Route>
       </Routes>
     </>
