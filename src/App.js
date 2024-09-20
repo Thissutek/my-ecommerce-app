@@ -7,7 +7,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Navbar from "./pages/components/nav-bar/navbar";
 import Heropage from "./pages/heroPage/heroPage";
 import ProductPage from "./pages/productPage/productPage";
-import ProductList from "./pages/components/productList/productList";
+import ProductList from "./pages/productList/productList";
 import LoginForm from "./pages/loginPage/loginPage";
 
 function App() {
