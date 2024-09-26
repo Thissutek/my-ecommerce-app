@@ -26,7 +26,6 @@ import {
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 
 
-
 const products = [
   { name: 'New Arrivals', description: 'New Seasonal Catalog', href: '/products', icon: TagIcon },
   { name: 'Tees', description: 'Fresh Designs, Everyday Comfort. ', href: '/products', icon: CursorArrowRaysIcon },
@@ -40,11 +39,11 @@ const callsToAction = [
 ]
 
 const profile = [
-  {name: 'Shopping Bag', href: '/', icon: ShoppingBagIcon },
+  {name: 'Cart', href: '/cart', icon: ShoppingBagIcon },
   {name: 'Log In', href: '/login', icon: UserCircleIcon },
 ]
 
-export default function Navbar() {
+export default function Navbar({ cartItems }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (

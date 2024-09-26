@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, Routes, Navigate } from "react-router-dom";
+import {Route, Routes } from "react-router-dom";
 import './App.css';
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -9,6 +9,7 @@ import Heropage from "./pages/heroPage/heroPage";
 import ProductPage from "./pages/productPage/productPage";
 import ProductList from "./pages/productList/productList";
 import LoginForm from "./pages/loginPage/loginPage";
+import Cart from "./pages/cart/cart"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/products/:productId' element={ <ProductPage />}></Route>
         <Route path='/login' element={<LoginForm />}></Route>
         <Route path="*" element={<div>404 Not Found</div>}></Route>
+        <Route path='/cart' element={<Cart />}></Route>
       </Routes>
     </>
   );

@@ -29,14 +29,25 @@ const mockProducts = [
 export default function ProductPage() {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
+    const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
         const fetchedProduct = mockProducts.find(p => p.id === parseInt(productId));
         setProduct(fetchedProduct);
     }, [productId]);
 
+    const addToCart = (product) => {
+        setCartItems(prevItems => [...prevItems, product]);
+        console.log('Added to Cart', product)
+    }
+
     if(!product) {
         return <div className='text-center mt-10 text-gray-600'>Loading...</div>
+    }
+
+    const handleAddToCart = () => {
+        addToCart(product);
+        alert(`${product.name} has been added to Cart`)
     }
 
     return (
@@ -58,7 +69,10 @@ export default function ProductPage() {
             <p className="text-xl text-indigo-600 font-semibold mb-2">${product.price.toFixed(2)}</p>
             <p className="text-gray-700 mb-6">{product.description}</p>
 
-            <button className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition">
+            <button 
+                className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition"
+                onClick={() => addToCart(product)}
+            >
                 Add to Cart
             </button>
             </div>
