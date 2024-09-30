@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export default function ProductCard({product}) {
     return(
         <div className='product-card border p-4 rounded-lg shadow-lg'>
-            <img src={product.image} alt={product.name} className='w-full h-48 object-cover'/>
+            <img src={`/images/${product.image}`} alt={product.name} className='w-full h-48 object-cover'/>
 
             <div className='mt-4'>
                 <h3 className='text-xl font-bold'>{product.name}</h3>

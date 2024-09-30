@@ -2,52 +2,52 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const mockProducts = [
-    {
-        id: 1,
-        name: 'Product 1',
-        image: '/images/94.jpg',
-        price: 39.99,
-        description: 'a new product for your everyday needs and i dont know what to put here',
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        image: '/images/94.jpg',
-        price: 19.99,
-        description: 'a new product for your everyday needs and i dont know what to put here',
-    },
-    {
-        id: 3,
-        name: 'Product 3',
-        image: '/images/94.jpg',
-        price: 25.99,
-        description: 'a new product for your everyday needs and i dont know what to put here',
-    },
-]
-
-export default function ProductPage() {
+export default function ProductPage({userId}) {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
-    const [cartItems, setCartItems] = useState([]);
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
-        const fetchedProduct = mockProducts.find(p => p.id === parseInt(productId));
-        setProduct(fetchedProduct);
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/products/${productId}`)
+                const data = await response.json();
+                setProduct(data.product)
+            } catch (error) {
+                console.error('Error in fetching product', error)
+            }
+        }
+
+        fetchProduct();
     }, [productId]);
 
-    const addToCart = (product) => {
-        setCartItems(prevItems => [...prevItems, product]);
-        console.log('Added to Cart', product)
+    const addToCart = async (userId, productId, quantity) => {
+        try {
+            const response = await fetch('http://localhost:5000/api/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, productId, quantity})
+            })
+
+            const data = await response.json();
+            console.log(data.message)
+        } catch (error) {
+            console.error('Error in adding item to cart', error)
+        }
     }
+
+
 
     if(!product) {
         return <div className='text-center mt-10 text-gray-600'>Loading...</div>
     }
 
     const handleAddToCart = () => {
-        addToCart(product);
-        alert(`${product.name} has been added to Cart`)
+        if(product) {
+            addToCart(userId, productId, quantity)
+        }
     }
 
     return (
@@ -57,7 +57,7 @@ export default function ProductPage() {
             {/* Product Image */}
             <div className="flex justify-center">
             <img
-                src={product.image}
+                src={`/images/${product.image}`}
                 alt={product.name}
                 className="w-full max-w-2x1 h-auto rounded-lg shadow-md object-cover"
             />
@@ -71,7 +71,7 @@ export default function ProductPage() {
 
             <button 
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition"
-                onClick={() => addToCart(product)}
+                onClick={handleAddToCart}
             >
                 Add to Cart
             </button>

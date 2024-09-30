@@ -1,43 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/product-card/productCard';
 
 
 const productTypes = ["Tees", "Outerwear", "Hoodies", "Accessories"];
 
-const mockProducts = [
-    {
-        id: 1,
-        name: 'Product 1',
-        image: '/images/94.jpg',
-        price: 39.99,
-        type: "Outerwear",
-    },
-    {
-        id: 2,
-        name: 'Product 2',
-        image: '/images/94.jpg',
-        price: 19.99,
-        type: "Hoodies",
-    },
-    {
-        id: 3,
-        name: 'Product 3',
-        image: '/images/94.jpg',
-        price: 25.99,
-        type: "Tees",
-    },
-    {
-        id: 4,
-        name: 'Product 4',
-        image: '/images/94.jpg',
-        price: 25.99,
-        type: "Accessories",
-    },
-]
 
 export default function ProductList() {
-    const [products] = useState(mockProducts); //Replace with actually product Later
+    const [products, setProducts] = useState([]); //Replace with actually product Later
     const [selectedTypes, setSelectTypes] = useState([]);
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/api/products`)
+                const data = await response.json();
+                setProducts(data.products)
+            } catch (error) {
+                console.error('Error in fetching product', error)
+            }
+        }
+
+        fetchProduct();
+    }, []);
 
     const handleFilterChange = (type) => {
         if(selectedTypes.includes(type)) {
@@ -72,7 +56,7 @@ export default function ProductList() {
 
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4'>
                 {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product}/>
+                    <ProductCard key={product.id} product={product} onA/>
                 ))}
             </div>
         </div>
