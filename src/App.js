@@ -10,6 +10,7 @@ import ProductPage from "./pages/productPage/productPage";
 import ProductList from "./pages/productList/productList";
 import LoginForm from "./pages/loginPage/loginPage";
 import Cart from "./pages/cart/cart"
+import SignUpPage from "./pages/signupPage/signUpPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path='/login' element={<LoginForm />}></Route>
         <Route path="*" element={<div>404 Not Found</div>}></Route>
         <Route path='/cart' element={<Cart />}></Route>
+        <Route path="/signup" element={<SignUpPage />}></Route>
       </Routes>
     </>
   );

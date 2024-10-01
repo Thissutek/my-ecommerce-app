@@ -3,10 +3,6 @@ import React, { useEffect, useState } from "react";
 export default function Cart() {
     const [cartItems, setCartItems] = useState([]);
     
-    useEffect(() => {
-        const storedCartItems = JSON.parse(localStorage.getItems('cart') || []);
-        setCartItems(storedCartItems)
-    }, [])
 
     if(cartItems.length === 0) {
         return <div className="text-center mt-10 text-gray-600">Your cart is empty</div>
