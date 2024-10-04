@@ -11,6 +11,7 @@ import ProductList from "./pages/productList/productList";
 import LoginForm from "./pages/loginPage/loginPage";
 import Cart from "./pages/cart/cart"
 import SignUpPage from "./pages/signupPage/signUpPage";
+import ProtectedRoute from "./pages/components/protectedRoute/protectedRoute";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="*" element={<div>404 Not Found</div>}></Route>
         <Route path='/cart' element={<Cart />}></Route>
         <Route path="/signup" element={<SignUpPage />}></Route>
+        <Route path="/protected" element={<ProtectedRoute />}></Route>
       </Routes>
     </>
   );

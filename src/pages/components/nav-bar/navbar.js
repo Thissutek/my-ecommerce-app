@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react';
+import {jwtDecode} from 'jwt-decode';
 import {
   Dialog,
   DialogPanel,
@@ -11,7 +12,7 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react'
+} from '@headlessui/react';
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -22,8 +23,8 @@ import {
   TagIcon,
   ShoppingBagIcon,
   UserCircleIcon
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+} from '@heroicons/react/24/outline';
+import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid';
 
 
 const products = [
@@ -40,11 +41,19 @@ const callsToAction = [
 
 const profile = [
   {name: 'Cart', href: '/cart', icon: ShoppingBagIcon },
-  {name: 'Log In', href: '/login', icon: UserCircleIcon },
 ]
 
 export default function Navbar({ cartItems }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if(token) {
+      const decodedToken = jwtDecode(token);
+      setUsername(decodedToken.username);
+    }
+  }, [])
 
   return (
     <header className="bg-white z-50 relative">
@@ -124,6 +133,18 @@ export default function Navbar({ cartItems }) {
               <span>{item.name}</span>
             </a>
           ))}
+
+          { username ? (
+            <span className='text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-3 p-4'>
+              <UserCircleIcon aria-hidden='true' className='h-5 w-5 flex-none text-gray-900'/>
+              <span>{username}</span>
+            </span>
+          ) : (
+            <a href='/login' className='text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4'>
+              <UserCircleIcon aria-hidden='true' className='h-5 w-5 flex-none text-gray-900'/>
+              <span>Log In</span>
+            </a>
+          )}
 
         </div>
       </nav>

@@ -6,7 +6,7 @@ const { getProducts, getIDProduct } = require('./services/productService');
 
 const bcrypt = require('bcryptjs');
 const pool = require('./db/db');
-
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -105,14 +105,22 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({message: 'Invalid email or password'});
     }
 
-    //Compare Password
+    // Compare Password
     const validPassword = await bcrypt.compare(password, user.rows[0].password);
     if(!validPassword) {
-      return res.status(400).json({message: 'Invalid email or passowrd'});
+      return res.status(400).json({message: 'Invalid email or password'});
     }
 
-    //Login successful
-    res.status(200).json({ message: 'Login successful', user: user.rows[0] })
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user.rows[0].id, username: user.rows[0].username},
+      process.env.JWT_SECRET,
+      { expiresIn: '1h'}
+    );
+
+    // Send the token
+    res.status(200).json({ message: 'Login Successful', token, username: user.rows[0].username})
+
   } catch (error) {
     console.error('Error in logging in', error);
     res.status(500).json({ message: 'Internal Server Error' })
