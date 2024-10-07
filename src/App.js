@@ -9,7 +9,7 @@ import Heropage from "./pages/heroPage/heroPage";
 import ProductPage from "./pages/productPage/productPage";
 import ProductList from "./pages/productList/productList";
 import LoginForm from "./pages/loginPage/loginPage";
-import Cart from "./pages/cart/cart"
+import Cart from "./pages/cart/cart";
 import SignUpPage from "./pages/signupPage/signUpPage";
 import ProtectedRoute from "./pages/components/protectedRoute/protectedRoute";
 

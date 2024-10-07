@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
+import { useState } from 'react';
 
 
 export default function Heropage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <div className="bg-white">
@@ -58,5 +58,5 @@ export default function Heropage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

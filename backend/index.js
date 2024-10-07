@@ -7,6 +7,7 @@ const { getProducts, getIDProduct } = require('./services/productService');
 const bcrypt = require('bcryptjs');
 const pool = require('./db/db');
 const jwt = require('jsonwebtoken');
+const authenticateToken = require('./middleware/authenticateToken');
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,52 +22,52 @@ app.post('/api/cart', async (req, res) => {
   
   try{
     const cartItem = await addItemToCart(userId, productId, quantity);
-    res.json({message: 'Item added to cart', cartItem})
+    res.json({message: 'Item added to cart', cartItem});
   } catch (error) {
     console.error('Error adding cart item', error);
-    res.status(500).json({message: 'Error adding item to cart'})
+    res.status(500).json({message: 'Error adding item to cart'});
   }
-})
+});
 
 // Fetches cart based on User ID
 app.get('/api/cart/:userId', async (req, res) => {
-  const userId = req.params.userId
+  const userId = req.params.userId;
 
   try {
-    const items = await getCartItems(userId)
-    res.status(200).json({success: true, items})
+    const items = await getCartItems(userId);
+    res.status(200).json({success: true, items});
   } catch (error) {
-    console.error('Error retrieving cart items', error)
-    res.status(500).json({success: false, message: 'Internal Server Error'})
+    console.error('Error retrieving cart items', error);
+    res.status(500).json({success: false, message: 'Internal Server Error'});
   }
-})
+});
 
 //fetches all products for product list
 app.get('/api/products', async (req, res) => {
   try {
     const products = await getProducts();
-    res.status(200).json({success: true, products})
+    res.status(200).json({success: true, products});
   } catch (error) {
     console.error('Error fetching products', error);
     res.status(500).json({success: false, message: 'Internal server error'});
   }
-})
+});
 
 //fetch specific ID product for product page
 app.get('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await getIDProduct(id)
+    const product = await getIDProduct(id);
     if (product) {
-      res.status(200).json({ success: true, product})
+      res.status(200).json({ success: true, product});
     } else {
-      res.status(500).json({success: false, message: 'Internal server error'})
+      res.status(500).json({success: false, message: 'Internal server error'});
     }
   } catch (error) {
-    console.error('Error in fethcing product id', error)
-    res.status(500).json({success: false, message: 'Internal server error'})
+    console.error('Error in fethcing product id', error);
+    res.status(500).json({success: false, message: 'Internal server error'});
   }
-})
+});
 
 
 //Sign Up Route
@@ -77,7 +78,7 @@ app.post('/api/auth/signup', async (req, res) => {
     //Checks if the user inputted email exists within the table
     const userCheck = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
     if (userCheck.rows.length > 0) {
-      return res.status(400).json({message: 'Email already exists'})
+      return res.status(400).json({message: 'Email already exists'});
     }
 
     //Hash the Password
@@ -87,12 +88,12 @@ app.post('/api/auth/signup', async (req, res) => {
     //Insert the new user into the database
     const newUser = await pool.query(`INSERT INTO users (username, email, password, created_at) VALUES ($1, $2, $3, NOW()) RETURNING *`, [username, email, hashedPassword]);
 
-    res.status(201).json({message: 'User registered successfully', user: newUser.rows[0]} )
+    res.status(201).json({message: 'User registered successfully', user: newUser.rows[0]} );
   } catch (error) {
     console.error('Error in registration', error);
-    res.status(500).json({message: 'Server error'})
+    res.status(500).json({message: 'Server error'});
   }
-}) 
+}); 
 
 //Log In
 app.post('/api/auth/login', async (req, res) => {
@@ -119,14 +120,18 @@ app.post('/api/auth/login', async (req, res) => {
     );
 
     // Send the token
-    res.status(200).json({ message: 'Login Successful', token, username: user.rows[0].username})
+    res.status(200).json({ message: 'Login Successful', token, username: user.rows[0].username});
 
   } catch (error) {
     console.error('Error in logging in', error);
-    res.status(500).json({ message: 'Internal Server Error' })
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-})
+});
+
+app.get('/api/protected-route', authenticateToken, (req, res) => {
+  res.json({ message: `Hello ${req.user.username}, this is a protected route!` });
+});
 
 app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-})
+  console.log(`Server running on http://localhost:${port}`);
+});

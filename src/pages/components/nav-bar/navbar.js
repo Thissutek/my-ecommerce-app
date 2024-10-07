@@ -1,7 +1,8 @@
-'use client'
+'use client';
 
 import { useState, useEffect } from 'react';
 import {jwtDecode} from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 import {
   Dialog,
   DialogPanel,
@@ -33,19 +34,21 @@ const products = [
   { name: 'Hoodies', description: 'Hoodies for Every Mood', href: '/products', icon: FingerPrintIcon },
   { name: 'Outerwear', description: 'Layer Up in Style', href: '/products', icon: SquaresPlusIcon },
   { name: 'Accessories', description: 'Small Details, Big Impact', href: '/products', icon: ArrowPathIcon },
-]
+];
 const callsToAction = [
   { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
   { name: 'Support', href: '#', icon: PhoneIcon },
-]
+];
 
 const profile = [
   {name: 'Cart', href: '/cart', icon: ShoppingBagIcon },
-]
+];
 
 export default function Navbar({ cartItems }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [username, setUsername] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -53,7 +56,13 @@ export default function Navbar({ cartItems }) {
       const decodedToken = jwtDecode(token);
       setUsername(decodedToken.username);
     }
-  }, [])
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUsername(null);
+    navigate('/login');
+  };
 
   return (
     <header className="bg-white z-50 relative">
@@ -128,24 +137,49 @@ export default function Navbar({ cartItems }) {
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {profile.map((item) => (
-              <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
+            <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
               <item.icon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
               <span>{item.name}</span>
             </a>
           ))}
 
-          { username ? (
-            <span className='text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-3 p-4'>
-              <UserCircleIcon aria-hidden='true' className='h-5 w-5 flex-none text-gray-900'/>
-              <span>{username}</span>
-            </span>
+          {username ? (
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-3 p-4"
+              >
+                <UserCircleIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+                <span>{username}</span>
+                <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+              </button>
+
+              {/* Dropdown for log out */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="py-1">
+                    <a
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                    Profile
+                    </a>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                    Log Out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
-            <a href='/login' className='text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4'>
-              <UserCircleIcon aria-hidden='true' className='h-5 w-5 flex-none text-gray-900'/>
+            <a href="/login" className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
+              <UserCircleIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
               <span>Log In</span>
             </a>
           )}
-
         </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -208,5 +242,5 @@ export default function Navbar({ cartItems }) {
         </DialogPanel>
       </Dialog>
     </header>
-  )
+  );
 }
