@@ -27,3 +27,6 @@ yarn-error.log*
 
 #eslint
 /eslint.config.mjs
+
+#debug
+/.vscode/

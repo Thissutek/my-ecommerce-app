@@ -22,23 +22,25 @@ export default function ProductPage({userId}) {
   }, [productId]);
 
   const addToCart = async (userId, productId, quantity) => {
+    const token = localStorage.getItem('token');
     try {
       const response = await fetch('http://localhost:5000/api/cart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId, productId, quantity})
+        body: JSON.stringify({ productId, quantity})
       });
+      
+      if(response.ok) {
+        console.log('Item added to cart.')
+      }
 
-      const data = await response.json();
-      console.log(data.message);
     } catch (error) {
       console.error('Error in adding item to cart', error);
     }
   };
-
-
 
   if(!product) {
     return <div className='text-center mt-10 text-gray-600'>Loading...</div>;

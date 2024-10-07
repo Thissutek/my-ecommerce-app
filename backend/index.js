@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { addItemToCart, getCartItems } = require('./services/cartService');
+const { addItemToCart, getCartItemsByUser} = require('./services/cartService');
 const { getProducts, getIDProduct } = require('./services/productService');
 
 const bcrypt = require('bcryptjs');
@@ -17,28 +17,29 @@ app.use(express.json());
 
 
 // Adds items to cart
-app.post('/api/cart', async (req, res) => {
-  const { userId, productId, quantity } = req.body;
-  
-  try{
+app.post('/api/cart', authenticateToken, async (req, res) => {
+  const { productId, quantity } = req.body;
+  const userId = req.user.userId; // Extracts User ID from the JWT session
+
+  try {
     const cartItem = await addItemToCart(userId, productId, quantity);
-    res.json({message: 'Item added to cart', cartItem});
+    res.json(cartItem);
   } catch (error) {
-    console.error('Error adding cart item', error);
-    res.status(500).json({message: 'Error adding item to cart'});
+    console.error('Error adding item to cart', error);
+    res.status(500).json({message: 'Internal Server Error'})
   }
 });
 
 // Fetches cart based on User ID
-app.get('/api/cart/:userId', async (req, res) => {
-  const userId = req.params.userId;
+app.get('/api/cart', authenticateToken, async (req, res) => {
+  const userId = req.user.userId; // Extracts User ID from the JWT session
 
-  try {
-    const items = await getCartItems(userId);
-    res.status(200).json({success: true, items});
+  try{
+    const cartItems = await getCartItemsByUser(userId);
+    res.json(cartItems)
   } catch (error) {
-    console.error('Error retrieving cart items', error);
-    res.status(500).json({success: false, message: 'Internal Server Error'});
+    console.error('Error fethcing cart items', error);
+    res.status(500).json({message: 'Internal Server Error'})
   }
 });
 

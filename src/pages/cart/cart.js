@@ -2,29 +2,94 @@ import React, { useEffect, useState } from "react";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
-    
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if(cartItems.length === 0) {
-    return <div className="text-center mt-10 text-gray-600">Your cart is empty</div>;
-  }
+  // Fetch the cart items when the component mounts
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      const token = localStorage.getItem('token');
+      setError(null);
+      setLoading(true);
+      try {
+        const response = await fetch('http://localhost:5000/api/cart', {
+          headers: {
+            'Authorization' : `Bearer ${token}`,
+          },
+        });
+
+        if(response.ok) {
+          const data = await response.json();
+          setCartItems(data);
+        } else {
+          throw new Error('Failed to fetch cart items');
+        }
+      } catch (error) {
+        setError(error.message)
+      } finally {
+        setLoading(false)
+      }
+    };
+
+    fetchCartItems();
+  }, [])
+
+  const handleRemoveItem = async (productId) => {
+
+  };
+
+  const handleUpdateQuantity = async (productId, newQuantity) => {
+
+  };
+
+  if(loading) return <p>Loading ...</p>
+  if(error) return <p>Error: {error}</p>
 
   return(
-    <div className="max-w-61 mx-auto mt-10 p-6 bg-white">
-      <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
-      <div className="grid grid-cols-1 gap-6">
-        {cartItems.map((item, index) => (
-          <div key={index} className="flex justify-between items-center border-b border-gray-200 py-4">
-            <div className="flex items-center">
-              <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
-              <div className="ml-4">
-                <h2 className="text-lg font-semibold">{item.name}</h2>
-                <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
+    <div className="container mx-auto px-4">
+      <h1 className="text-2xl font-semibold mb-6">Your Cart</h1>
+
+      {cartItems.length === 0 ? (
+        <p>Your cart is empty</p>
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"> 
+          {cartItems.map((item) => (
+            <div key={item.product_id} className="border p-4 round-lg shadow-sm">
+              <img src={`/images/${item.image_url}`} alt={item.name} className="h-32 w-auto object-cover mb-4"/>
+              <h2 className="text-lg font-semibold">{item.name}</h2>
+              <p className="text-gray-600">Price: ${item.price}</p>
+              <div className="flex items-center mt-4 space-x-4">
+                <span> Quantity: {item.quantity}</span>
+                <button 
+                  className="px-3 py-1 bg-gray-200 rounded-md" 
+                  onClick={() => handleUpdateQuantity(item.product_id, item.quantity - 1)}
+                  disabled={item.quantity === 1}
+                >
+                  -
+                </button>
+                <button 
+                className="px-3 py-1 bg-gray-200 rounded-md" 
+                onClick={() => handleUpdateQuantity(item.product_id, item.quantity + 1)}
+                >
+                  +
+                </button>
               </div>
+              <button
+                className="mt-4 text-red-600"
+                onClick={() => handleRemoveItem(item.product_id)}
+              >
+                Remove
+              </button>
             </div>
-            <div className="text-lg font-semibold">${item.price.toFixed(2)}</div>
-          </div>
-        ))}
-      </div>  
+          ))}
+        </div>
+      )}
+      <div className="mt-6">
+        <button className="px-4 py-2 bg-indigo-600 text-white rounded-md">
+          Proceed to Checkout
+        </button>
+      </div>
+
     </div>
   );
 }
