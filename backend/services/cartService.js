@@ -26,7 +26,7 @@ async function getCartItemsByUser(userId) {
     JOIN products ON cart.product_id = products.id 
     WHERE cart.user_id = $1;`;
   const result = await pool.query(query, [userId]);
-  console.log(result.rows)
+  console.log(result.rows);
   return result.rows;
 }
 
@@ -50,8 +50,8 @@ async function updateCartQuantity(userId, productId, quantity) {
     RETURNING *;
     `;
 
-    const result = await pool.query(query, [userId, productId, quantity])
-    return result.rows[0];
+  const result = await pool.query(query, [userId, productId, quantity]);
+  return result.rows[0];
 }
 
 module.exports = { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity };

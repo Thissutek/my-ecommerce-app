@@ -2,10 +2,11 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-export default function ProductPage({userId}) {
+export default function ProductPage() {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -21,7 +22,7 @@ export default function ProductPage({userId}) {
     fetchProduct();
   }, [productId]);
 
-  const addToCart = async (userId, productId, quantity) => {
+  const addToCart = async (productId, quantity) => {
     const token = localStorage.getItem('token');
     try {
       const response = await fetch('http://localhost:5000/api/cart', {
@@ -34,7 +35,14 @@ export default function ProductPage({userId}) {
       });
       
       if(response.ok) {
-        console.log('Item added to cart.')
+        setNotification("Item added to cart!");
+
+        // Hides notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 3000);
+      } else {
+        throw new Error('Failed to add item to cart');
       }
 
     } catch (error) {
@@ -48,7 +56,7 @@ export default function ProductPage({userId}) {
 
   const handleAddToCart = () => {
     if(product) {
-      addToCart(userId, productId, quantity);
+      addToCart(productId, quantity);
     }
   };
 
@@ -77,6 +85,12 @@ export default function ProductPage({userId}) {
           >
                 Add to Cart
           </button>
+          {/* Notification Box */}
+          {notification && (
+            <div className='fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-md'>
+              {notification}
+            </div>
+          )}
         </div>
       </div>
     </div>

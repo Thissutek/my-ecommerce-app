@@ -27,7 +27,7 @@ export default function Cart() {
         });
 
         if (response.status === 401) {
-          alert("Session expired, please log in again.")
+          alert("Session expired, please log in again.");
           window.location.href = '/login';
           return;
         }
@@ -39,14 +39,14 @@ export default function Cart() {
           throw new Error('Failed to fetch cart items');
         }
       } catch (error) {
-        setError(error.message)
+        setError(error.message);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     };
 
     fetchCartItems();
-  }, [])
+  }, []);
 
   const handleRemoveItem = async (productId) => {
     const token = localStorage.getItem('token');
@@ -62,7 +62,7 @@ export default function Cart() {
       if(response.ok) {
         setCartItems(cartItems.filter(item => item.product_id !== productId));
       } else {
-        throw new Error('Failed to remove item')
+        throw new Error('Failed to remove item');
       }
     } catch (error) {
       setError(error.message);
@@ -87,10 +87,10 @@ export default function Cart() {
         setCartItems(cartItems.map(item => item.product_id === productId ? {...item, quantity: updatedItem.quantity} : item
         ));
       } else {
-        throw new Error ('Failed to update quantity.')
+        throw new Error ('Failed to update quantity.');
       }
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
   };
 
@@ -98,8 +98,8 @@ export default function Cart() {
     return cartItems.reduceRight((total, item) => total + item.price * item.quantity, 0);
   };
 
-  if(loading) return <p>Loading ...</p>
-  if(error) return <p>Error: {error}</p>
+  if(loading) return <p>Loading ...</p>;
+  if(error) return <p>Error: {error}</p>;
 
   return(
     <div className="container mx-auto px-4">
@@ -124,8 +124,8 @@ export default function Cart() {
                   -
                 </button>
                 <button 
-                className="px-3 py-1 bg-gray-200 rounded-md" 
-                onClick={() => handleUpdateQuantity(item.product_id, item.quantity + 1)}
+                  className="px-3 py-1 bg-gray-200 rounded-md" 
+                  onClick={() => handleUpdateQuantity(item.product_id, item.quantity + 1)}
                 >
                   +
                 </button>

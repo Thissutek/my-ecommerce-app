@@ -26,7 +26,7 @@ app.post('/api/cart', authenticateToken, async (req, res) => {
     res.json(cartItem);
   } catch (error) {
     console.error('Error adding item to cart', error);
-    res.status(500).json({message: 'Internal Server Error'})
+    res.status(500).json({message: 'Internal Server Error'});
   }
 });
 
@@ -36,10 +36,10 @@ app.get('/api/cart', authenticateToken, async (req, res) => {
 
   try{
     const cartItems = await getCartItemsByUser(userId);
-    res.json(cartItems)
+    res.json(cartItems);
   } catch (error) {
     console.error('Error fetching cart items', error);
-    res.status(500).json({message: 'Internal Server Error'})
+    res.status(500).json({message: 'Internal Server Error'});
   }
 });
 
@@ -136,9 +136,9 @@ app.delete('/api/cart/:productId', authenticateToken, async (req, res) => {
 
   try {
     const removedItem = await removeItemFromCart(userId, productId);
-    res.json(removedItem)
+    res.json(removedItem);
   } catch (error) {
-    res.status(500).json({message: 'Error removing item from cart.'})
+    res.status(500).json({message: 'Error removing item from cart.'});
   }
 });
 
@@ -152,9 +152,9 @@ app.put('/api/cart/:productId', authenticateToken, async (req, res) => {
     const updatedItem = await updateCartQuantity(userId, productId, quantity);
     res.json(updatedItem);
   } catch (error) {
-    res.status(500).json({message: 'Error updating cart item.'})
+    res.status(500).json({message: 'Error updating cart item.'});
   }
-})
+});
 
 app.get('/api/protected-route', authenticateToken, (req, res) => {
   res.json({ message: `Hello ${req.user.username}, this is a protected route!` });
