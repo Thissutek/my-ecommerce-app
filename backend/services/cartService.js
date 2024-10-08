@@ -1,6 +1,6 @@
 const pool = require('../db/db');
 
-//Add item to cart
+// Add item to cart
 async function addItemToCart(userId, productId, quantity) {
   const query = `
     INSERT INTO cart (user_id, product_id, quantity)
@@ -13,7 +13,7 @@ async function addItemToCart(userId, productId, quantity) {
   return result.rows[0];
 }
 
-//Get items from cart
+// Get items from cart
 async function getCartItemsByUser(userId) {
   const query = `
     SELECT 
@@ -30,4 +30,28 @@ async function getCartItemsByUser(userId) {
   return result.rows;
 }
 
-module.exports = { addItemToCart, getCartItemsByUser };
+// Removes items from cart
+async function removeItemFromCart(userId, productId) {
+  const query = `
+    DELETE FROM cart
+    WHERE user_id = $1 AND product_id = $2
+    RETURNING *;
+    `;
+
+  const result = await pool.query(query, [userId, productId]);
+  return result.rows[0];
+}
+
+async function updateCartQuantity(userId, productId, quantity) {
+  const query = `
+    UPDATE cart
+    SET quantity = $3
+    WHERE user_id = $1 AND product_id = $2
+    RETURNING *;
+    `;
+
+    const result = await pool.query(query, [userId, productId, quantity])
+    return result.rows[0];
+}
+
+module.exports = { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity };

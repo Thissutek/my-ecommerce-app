@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { checkTokenExpiry } from "../utils/authUtils";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -11,12 +12,25 @@ export default function Cart() {
       const token = localStorage.getItem('token');
       setError(null);
       setLoading(true);
+
+      if(!checkTokenExpiry()) {
+        alert("Session expired, please log in again.");
+        window.location.href = '/login';
+        return;
+      }
+
       try {
         const response = await fetch('http://localhost:5000/api/cart', {
           headers: {
             'Authorization' : `Bearer ${token}`,
           },
         });
+
+        if (response.status === 401) {
+          alert("Session expired, please log in again.")
+          window.location.href = '/login';
+          return;
+        }
 
         if(response.ok) {
           const data = await response.json();
@@ -35,11 +49,53 @@ export default function Cart() {
   }, [])
 
   const handleRemoveItem = async (productId) => {
+    const token = localStorage.getItem('token');
 
+    try {
+      const response = await fetch(`http://localhost:5000/api/cart/${productId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      });
+
+      if(response.ok) {
+        setCartItems(cartItems.filter(item => item.product_id !== productId));
+      } else {
+        throw new Error('Failed to remove item')
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleUpdateQuantity = async (productId, newQuantity) => {
+    const token = localStorage.getItem('token');
 
+    try {
+      const response = await fetch(`http://localhost:5000/api/cart/${productId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ quantity: newQuantity})
+      });
+
+      if(response.ok) {
+        const updatedItem = await response.json();
+        setCartItems(cartItems.map(item => item.product_id === productId ? {...item, quantity: updatedItem.quantity} : item
+        ));
+      } else {
+        throw new Error ('Failed to update quantity.')
+      }
+    } catch (error) {
+      setError(error.message)
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    return cartItems.reduceRight((total, item) => total + item.price * item.quantity, 0);
   };
 
   if(loading) return <p>Loading ...</p>
@@ -85,6 +141,7 @@ export default function Cart() {
         </div>
       )}
       <div className="mt-6">
+        <h2 className="text-lg font-semibold">Total: ${calculateTotalPrice().toFixed(2)}</h2>
         <button className="px-4 py-2 bg-indigo-600 text-white rounded-md">
           Proceed to Checkout
         </button>

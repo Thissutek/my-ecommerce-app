@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const { addItemToCart, getCartItemsByUser} = require('./services/cartService');
+const { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity} = require('./services/cartService');
 const { getProducts, getIDProduct } = require('./services/productService');
 
 const bcrypt = require('bcryptjs');
@@ -38,7 +38,7 @@ app.get('/api/cart', authenticateToken, async (req, res) => {
     const cartItems = await getCartItemsByUser(userId);
     res.json(cartItems)
   } catch (error) {
-    console.error('Error fethcing cart items', error);
+    console.error('Error fetching cart items', error);
     res.status(500).json({message: 'Internal Server Error'})
   }
 });
@@ -128,6 +128,33 @@ app.post('/api/auth/login', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+// Remove item from cart
+app.delete('/api/cart/:productId', authenticateToken, async (req, res) => {
+  const {productId} = req.params;
+  const userId = req.user.userId;
+
+  try {
+    const removedItem = await removeItemFromCart(userId, productId);
+    res.json(removedItem)
+  } catch (error) {
+    res.status(500).json({message: 'Error removing item from cart.'})
+  }
+});
+
+// Update cart item quantity
+app.put('/api/cart/:productId', authenticateToken, async (req, res) => {
+  const { productId } = req.params;
+  const { quantity } = req.body;
+  const userId = req.user.userId;
+
+  try {
+    const updatedItem = await updateCartQuantity(userId, productId, quantity);
+    res.json(updatedItem);
+  } catch (error) {
+    res.status(500).json({message: 'Error updating cart item.'})
+  }
+})
 
 app.get('/api/protected-route', authenticateToken, (req, res) => {
   res.json({ message: `Hello ${req.user.username}, this is a protected route!` });
