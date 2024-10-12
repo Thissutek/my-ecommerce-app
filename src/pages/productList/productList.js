@@ -1,63 +1,75 @@
 import React, { useState, useEffect } from 'react';
-import ProductCard from '../components/product-card/productCard';
-
-
-const productTypes = ["Tees", "Outerwear", "Hoodies", "Accessories"];
-
+import { Link } from 'react-router-dom'
 
 export default function ProductList() {
   const [products, setProducts] = useState([]); //Replace with actually product Later
-  const [selectedTypes, setSelectTypes] = useState([]);
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/products`);
+        let query = '';
+        if(filter) {
+          query = `?type=${filter}`;
+        }
+
+        const response = await fetch(`http://localhost:5000/api/products${query}`);
         const data = await response.json();
-        setProducts(data.products);
+        
+        if(data.success) {
+          setProducts(data.products)
+        } else {
+          console.error('Failed to fetch products');
+        }
+
       } catch (error) {
         console.error('Error in fetching product', error);
       }
     };
 
     fetchProduct();
-  }, []);
+  }, [filter]);
 
-  const handleFilterChange = (type) => {
-    if(selectedTypes.includes(type)) {
-      setSelectTypes(selectedTypes.filter(t => t !== type)); //Removes the select products by filter
-    } else {
-      setSelectTypes([...selectedTypes, type]);   // Add to Selected
-    }
-  };
-
-  const filteredProducts = selectedTypes.length > 0
-    ? products.filter(product => selectedTypes.includes(product.type))
-    : products;
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  }
 
   return(
-    <div>
-      <div className='filter-bar p-4'>
-        <h3 className='text-lg font-semibold'>Product Type</h3>
-        <div className='space-x-4 mt-2'>
-          {productTypes.map((type) => (
-            <label key={type} className='inline-flex items-center'>
-              <input 
-                type='checkbox'
-                checked={selectedTypes.includes(type)}
-                onChange={() => handleFilterChange(type)}
-                className='form-checkbox h-5 w-5'  
-              />
-              <span className='ml-2'>{type}</span>
-            </label>
-          ))}
-        </div>
+    <div className='max-w-6xl mx-auto mt-20 p-6 bg-white'>
+      {/* Filter Dropdown */}
+      <div className='mb-4'>
+        <label htmlFor='filter' className='mr-2'>Filter By Type</label>
+        <select id='filter' value={filter} onChange={handleFilterChange} className='p-2 border rounded'>
+          <option value="">All</option>
+          <option value="T">Tees</option>
+          <option value="O">Outerwear</option>
+        </select>
       </div>
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4'>
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} onA/>
-        ))}
+      {/* Display Products */}
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
+        {products.length > 0 ? (
+          products.map((product) => (
+            <div key={product.id} className='p-4 border rounded'>
+              <img 
+                src={`/images/${product.image}`} 
+                alt={product.name}
+                className='w-full h-64 object-cover mb-4'
+              />
+              <h2 className='text-lg font-bold'>{product.name}</h2>
+              <p>${product.price.toFixed(2)}</p>
+
+              <Link to={`${product.id}`}>
+                <button className='mt-4 bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-500'>
+                  View Details
+                </button>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <p>No products found</p>
+        )} 
+
       </div>
     </div>
   );

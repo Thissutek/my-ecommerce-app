@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity} = require('./services/cartService');
-const { getProducts, getIDProduct } = require('./services/productService');
+const { getProducts, getIDProduct} = require('./services/productService');
 
 const bcrypt = require('bcryptjs');
 const pool = require('./db/db');
@@ -45,8 +45,10 @@ app.get('/api/cart', authenticateToken, async (req, res) => {
 
 //fetches all products for product list
 app.get('/api/products', async (req, res) => {
+  const { type } = req.query;
+
   try {
-    const products = await getProducts();
+    const products = await getProducts(type);
     res.status(200).json({success: true, products});
   } catch (error) {
     console.error('Error fetching products', error);
@@ -155,6 +157,8 @@ app.put('/api/cart/:productId', authenticateToken, async (req, res) => {
     res.status(500).json({message: 'Error updating cart item.'});
   }
 });
+
+//
 
 app.get('/api/protected-route', authenticateToken, (req, res) => {
   res.json({ message: `Hello ${req.user.username}, this is a protected route!` });
