@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -71,6 +71,11 @@ export default function LoginForm() {
         <button type='submit' className='w-full px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700'>
                     Log In
         </button>
+        <p className='text-center font-semibold mt-4'>Not a member yet? &nbsp;
+          <Link to='/signup' className='text-indigo-600 hover:underline'>
+            Sign up for free
+          </Link>
+        </p>
       </form>
     </div>
   );

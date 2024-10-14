@@ -2,7 +2,7 @@ const pool = require('../db/db');
 
 const getProducts = async (type) => {
   let query = 'SELECT * FROM products';
-  const queryParams = []
+  const queryParams = [];
 
   if (type) {
     query += ' WHERE type = $1';
@@ -14,7 +14,7 @@ const getProducts = async (type) => {
     return result.rows;
   } catch (error) {
     console.error('Error fetching products from database', error);
-    throw error
+    throw error;
   }
 };
 

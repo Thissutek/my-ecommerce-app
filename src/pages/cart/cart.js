@@ -141,7 +141,7 @@ export default function Cart() {
         </div>
       )}
       <div className="mt-6">
-        <h2 className="text-lg font-semibold">Total: ${calculateTotalPrice().toFixed(2)}</h2>
+        <h2 className="text-lg font-semibold mb-4">Total: ${calculateTotalPrice().toFixed(2)}</h2>
         <button className="px-4 py-2 bg-indigo-600 text-white rounded-md">
           Proceed to Checkout
         </button>

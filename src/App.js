@@ -12,6 +12,7 @@ import LoginForm from "./pages/loginPage/loginPage";
 import Cart from "./pages/cart/cart";
 import SignUpPage from "./pages/signupPage/signUpPage";
 import ProtectedRoute from "./pages/components/protectedRoute/protectedRoute";
+import CheckoutPage from "./pages/checkoutPage/checkoutPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path='/cart' element={<Cart />}></Route>
         <Route path="/signup" element={<SignUpPage />}></Route>
         <Route path="/protected" element={<ProtectedRoute />}></Route>
+        <Route path="/checkout" element={<CheckoutPage />}></Route>
       </Routes>
     </>
   );

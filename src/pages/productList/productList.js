@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 export default function ProductList() {
   const [products, setProducts] = useState([]); //Replace with actually product Later
-  const [filter, setFilter] = useState('')
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -17,7 +17,7 @@ export default function ProductList() {
         const data = await response.json();
         
         if(data.success) {
-          setProducts(data.products)
+          setProducts(data.products);
         } else {
           console.error('Failed to fetch products');
         }
@@ -32,10 +32,10 @@ export default function ProductList() {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
-  }
+  };
 
   return(
-    <div className='max-w-6xl mx-auto mt-20 p-6 bg-white'>
+    <div className='max-w-7xl mx-auto mt-20 p-6 bg-white'>
       {/* Filter Dropdown */}
       <div className='mb-4'>
         <label htmlFor='filter' className='mr-2'>Filter By Type</label>
@@ -43,6 +43,7 @@ export default function ProductList() {
           <option value="">All</option>
           <option value="T">Tees</option>
           <option value="O">Outerwear</option>
+          <option value="P">Pants</option>
         </select>
       </div>
 
