@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { checkTokenExpiry } from "../utils/authUtils";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   // Fetch the cart items when the component mounts
   useEffect(() => {
@@ -98,6 +101,11 @@ export default function Cart() {
     return cartItems.reduceRight((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const handleCheckout = () => {
+    const total = calculateTotalPrice().toFixed(2);
+    navigate(`/checkout?total=${total}`);
+  };
+
   if(loading) return <p>Loading ...</p>;
   if(error) return <p>Error: {error}</p>;
 
@@ -142,7 +150,7 @@ export default function Cart() {
       )}
       <div className="mt-6">
         <h2 className="text-lg font-semibold mb-4">Total: ${calculateTotalPrice().toFixed(2)}</h2>
-        <button className="px-4 py-2 bg-indigo-600 text-white rounded-md">
+        <button className="px-4 py-2 bg-indigo-600 text-white rounded-md" onClick={handleCheckout}>
           Proceed to Checkout
         </button>
       </div>

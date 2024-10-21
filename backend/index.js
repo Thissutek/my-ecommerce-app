@@ -158,11 +158,31 @@ app.put('/api/cart/:productId', authenticateToken, async (req, res) => {
   }
 });
 
-//
+// Creates an a new row for orders table
+app.post('/api/orders', async (req, res) => {
+  const { userId, shippingInfo, totalAmount } = req.body;
 
-app.get('/api/protected-route', authenticateToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.username}, this is a protected route!` });
+  try {
+    const result = await pool.query(
+      `INSERT INTO orders(user_id, order_total, shipping_name, shipping_address, city, postal_code)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+    [
+      userId,
+      totalAmount,
+      shippingInfo.name,
+      shippingInfo.address,
+      shippingInfo.city,
+      shippingInfo.postalCode, 
+    ]
+  );
+
+  res.status(201).json({ success: true, order: result.rows[0]});
+  } catch (error) {
+    console.error('Error in creating order:', error)
+    res.status(500).json({ success: false, message: 'Failed to create order'});
+  }
 });
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
