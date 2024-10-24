@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CheckoutPage({ userId }) {
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const totalAmount = params.get('total') || 0
+  const navigate = useNavigate();
+
+  const { cartItems, total } = location.state || {};
+  
   const [shippingInfo, setShippingInfo] = useState({
     name: '',
     address: '',
@@ -32,13 +33,16 @@ export default function CheckoutPage({ userId }) {
         body: JSON.stringify({
           userId,
           shippingInfo,
-          totalAmount: 100,
+          totalAmount: total,
         }),
       });
 
       if(response.ok) {
         const data = await response.json();
         console.log('Order created successfully:', data);
+        navigate('/order-confirmation', {
+          state: { cartItems, totalAmount: total, shippingInfo}
+        })
       } else {
         console.error('Failed to create order');
       }
@@ -73,7 +77,7 @@ export default function CheckoutPage({ userId }) {
           <label className="block text-lg font-medium text-gray-700">Country</label>
           <input type="text" name="country" value={shippingInfo.country} onChange={handleInputChange} className="w-full p-2 border border-gray-300 rounded mt-2" required />
         </div>
-        <h2 className="text-xl font-semibold mt-6">Total Amount: ${totalAmount}</h2>
+        <h2 className="text-xl font-semibold mt-6 mb-4">Total Amount: ${total}</h2>
         {/* Submit Shipping Info*/}
         <button type="submit" className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition">
                     Confirm and Proceed

@@ -103,7 +103,7 @@ export default function Cart() {
 
   const handleCheckout = () => {
     const total = calculateTotalPrice().toFixed(2);
-    navigate(`/checkout?total=${total}`);
+    navigate(`/checkout`, { state: {cartItems, total } });
   };
 
   if(loading) return <p>Loading ...</p>;

@@ -12,6 +12,7 @@ import LoginForm from "./pages/loginPage/loginPage";
 import Cart from "./pages/cart/cart";
 import SignUpPage from "./pages/signupPage/signUpPage";
 import CheckoutPage from "./pages/checkoutPage/checkoutPage";
+import OrderConfirmation from "./pages/orderConfirmation/orderConfirmation";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path='/cart' element={<Cart />}></Route>
         <Route path="/signup" element={<SignUpPage />}></Route>
         <Route path="/checkout" element={<CheckoutPage />}></Route>
+        <Route path="/order-confirmation" element={<OrderConfirmation />} ></Route>
       </Routes>
     </>
   );
