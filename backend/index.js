@@ -159,27 +159,94 @@ app.put('/api/cart/:productId', authenticateToken, async (req, res) => {
 });
 
 // Creates an a new row for orders table
-app.post('/api/orders', async (req, res) => {
-  const { userId, shippingInfo, totalAmount } = req.body;
+app.post('/api/orders', authenticateToken, async (req, res) => {
+  const { shippingInfo, totalAmount, cartItems } = req.body;
+  const userId = req.user.userId;
 
   try {
-    const result = await pool.query(
-      `INSERT INTO orders(user_id, order_total, shipping_name, shipping_address, city, postal_code)
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-    [
-      userId,
-      totalAmount,
-      shippingInfo.name,
-      shippingInfo.address,
-      shippingInfo.city,
-      shippingInfo.postalCode, 
-    ]
-  );
+    //Starts the transaction
+    await pool.query('BEGIN');
 
-  res.status(201).json({ success: true, order: result.rows[0]});
+    const orderResult = await pool.query(
+      `INSERT INTO orders(user_id, order_total, shipping_name, shipping_address, city, postal_code)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`,
+      [
+        userId,
+        totalAmount,
+        shippingInfo.name,
+        shippingInfo.address,
+        shippingInfo.city,
+        shippingInfo.postalCode, 
+      ]
+    );
+
+    const orderId = orderResult.rows[0].id;
+
+    for (const item of cartItems) {
+      await pool.query(
+        `INSERT INTO order_items(order_id, product_id, quantity, price) VALUES ($1, $2, $3, $4)`,
+        [
+          orderId,
+          item.product_id,
+          item.quantity,
+          item.price
+        ]
+      );
+    }
+    // Commit the transaction
+    await pool.query('COMMIT');
+
+    res.status(201).json({ success: true, orderId});
   } catch (error) {
-    console.error('Error in creating order:', error)
+    await pool.query('ROLLBACK');
+    console.error('Error in creating order:', error);
     res.status(500).json({ success: false, message: 'Failed to create order'});
+  }
+});
+
+// Retrieve orders based on orders and order_items table
+app.get('/api/orders/:userId', authenticateToken, async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const orders = await pool.query(
+      `SELECT o.id AS order_id, o.order_total, o.order_status, o.shipping_name, o.shipping_address, 
+              o.city, o.postal_code, o.created_at, oi.product_id, oi.quantity
+       FROM orders o
+       LEFT JOIN order_items oi ON o.id = oi.order_id
+       WHERE o.user_id = $1
+       ORDER BY o.created_at DESC`,
+      [userId]
+    );
+
+    const ordersData = {};
+    orders.rows.forEach(row => {
+      const orderId = row.order_id;
+      if(!ordersData[orderId]) {
+        ordersData[orderId] = {
+          orderId,
+          orderTotal: row.order_total,
+          orderStatus: row.order_status,
+          shippingInfo: {
+            name: row.shipping_name,
+            address: row.shipping_address,
+            city: row.city,
+            postalCode: row.postal_code,
+          },
+          createdAt: row.created_at,
+          items: [],
+        };
+      }
+      ordersData[orderId].items.push({
+        productId: row.product_id,
+        quantity: row.quantity,
+      });
+    });
+    
+    res.json({ success: true, orders: Object.values(ordersData)});
+  } catch(error) {
+    console.error('Error fetching order data:', error);
+    res.status(500).json({ success: false, message: 'Failed to retrieve orders' });
   }
 });
 

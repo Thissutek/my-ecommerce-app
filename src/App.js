@@ -13,6 +13,7 @@ import Cart from "./pages/cart/cart";
 import SignUpPage from "./pages/signupPage/signUpPage";
 import CheckoutPage from "./pages/checkoutPage/checkoutPage";
 import OrderConfirmation from "./pages/orderConfirmation/orderConfirmation";
+import OrderStatus from "./pages/orderStatus/orderStatusPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage />}></Route>
         <Route path="/checkout" element={<CheckoutPage />}></Route>
         <Route path="/order-confirmation" element={<OrderConfirmation />} ></Route>
+        <Route path="/order-status" element={<OrderStatus />}></Route>
       </Routes>
     </>
   );

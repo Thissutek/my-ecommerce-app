@@ -22,7 +22,9 @@ export default function CheckoutPage({ userId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+
+
     try {
       const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',
@@ -34,6 +36,7 @@ export default function CheckoutPage({ userId }) {
           userId,
           shippingInfo,
           totalAmount: total,
+          cartItems,
         }),
       });
 
@@ -42,12 +45,12 @@ export default function CheckoutPage({ userId }) {
         console.log('Order created successfully:', data);
         navigate('/order-confirmation', {
           state: { cartItems, totalAmount: total, shippingInfo}
-        })
+        });
       } else {
         console.error('Failed to create order');
       }
     } catch (error) {
-      console.error('Error in creating order', error)
+      console.error('Error in creating order', error);
     }
   };
 
