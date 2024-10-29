@@ -37,7 +37,7 @@ export default function OrderStatus({ userId }) {
       <h1 className='text-3xl font-bold mb-6'>Order Status</h1>
       {orders.length > 0 ? (
         orders.map(order => (
-          <div key={order.orderId} className="mb-6 border-b pb-4">
+          <div key={order.orderId} className="mb-8 border-b pb-4">
             <h2 className="text-xl font-semibold">Order ID: {order.orderId}</h2>
             <p>Status: {order.orderStatus}</p>
             <p>Order Total: ${order.orderTotal}</p>
