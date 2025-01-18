@@ -16,13 +16,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the React App(frontend)
-app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-//Catch-all from an route not caught by an API route
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-})
 
 // Adds items to cart
 app.post('/api/cart', authenticateToken, async (req, res) => {
@@ -258,6 +252,13 @@ app.get('/api/orders/:userId', authenticateToken, async (req, res) => {
   }
 });
 
+// Serve static files from the React App(frontend)
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+//Catch-all from an route not caught by an API route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
