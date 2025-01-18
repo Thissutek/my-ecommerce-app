@@ -12,7 +12,7 @@ export default function ProductPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/products/${productId}`);
+        const response = await fetch(`${process.env.DATABASE_URL}/api/products/${productId}`);
         const data = await response.json();
         setProduct(data.product);
       } catch (error) {

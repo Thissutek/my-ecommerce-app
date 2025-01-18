@@ -23,7 +23,7 @@ export default function Cart() {
       }
 
       try {
-        const response = await fetch('http://localhost:5000/api/cart', {
+        const response = await fetch(`${process.env.DATABASE_URL}/api/cart`, {
           headers: {
             'Authorization' : `Bearer ${token}`,
           },
