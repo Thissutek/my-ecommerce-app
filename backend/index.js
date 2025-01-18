@@ -4,6 +4,7 @@ const cors = require('cors');
 const { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity} = require('./services/cartService');
 const { getProducts, getIDProduct} = require('./services/productService');
 
+const path = require('path');
 const bcrypt = require('bcryptjs');
 const pool = require('./db/db');
 const jwt = require('jsonwebtoken');
@@ -16,11 +17,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from the React App(frontend)
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 //Catch-all fro an route not caught by an API route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 })
 
 // Adds items to cart
