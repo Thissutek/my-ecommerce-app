@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { addItemToCart, getCartItemsByUser, removeItemFromCart, updateCartQuantity} = require('./services/cartService');
@@ -15,6 +15,13 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Serve static files from the React App(frontend)
+app.use(express.static(path.join(__dirname, 'build')));
+
+//Catch-all fro an route not caught by an API route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+})
 
 // Adds items to cart
 app.post('/api/cart', authenticateToken, async (req, res) => {
