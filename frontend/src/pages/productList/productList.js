@@ -13,7 +13,7 @@ export default function ProductList() {
           query = `?type=${filter}`;
         }
 
-        const response = await fetch(`${process.env.DATABASE_URL}/api/products${query}`);
+        const response = await fetch(`${process.env.REACT_API_URL}/api/products${query}`);
         const data = await response.json();
         
         if(data.success) {
