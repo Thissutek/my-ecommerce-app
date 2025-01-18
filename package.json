@@ -4,13 +4,13 @@
     "private": true,
     "scripts": {
       "start": "node backend/index.js",   
-      "client": "npm run start --prefix frontend",   
       "build": "npm run build --prefix frontend",    
-      "dev": "concurrently \"npm run client\" \"npm run start\"", 
-      "heroku-postbuild": "npm run build" 
+      "postinstall": "npm run build", 
+      "serve": "node backend/index.js" 
     },
     "dependencies": {
-      "concurrently": "^7.2.1"             
+      "concurrently": "^7.2.1",
+      "serve-static": "^1.15.0" 
     }
   }
   
