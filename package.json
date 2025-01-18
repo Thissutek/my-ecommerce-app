@@ -5,7 +5,7 @@
     "scripts": {
       "start": "node backend/index.js",   
       "build": "npm run build --prefix frontend",    
-      "postinstall": "npm run build", 
+      "postinstall": "npm install --prefix frontend && npm run build", 
       "serve": "node backend/index.js" 
     },
     "dependencies": {
