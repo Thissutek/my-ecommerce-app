@@ -9,7 +9,7 @@ export default function OrderStatus({ userId }) {
     const fetchOrders = async () => {
       const token = localStorage.getItem('token');
       try {
-        const response = await fetch(`${process.env.REACT_API_URL}/api/orders/${userId}`, {
+        const response = await fetch(`/api/orders/${userId}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

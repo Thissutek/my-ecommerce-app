@@ -23,7 +23,7 @@ export default function Cart() {
       }
 
       try {
-        const response = await fetch(`${process.env.REACT_API_URL}/api/cart`, {
+        const response = await fetch(`/api/cart`, {
           headers: {
             'Authorization' : `Bearer ${token}`,
           },
