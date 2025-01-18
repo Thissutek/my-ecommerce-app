@@ -15,6 +15,7 @@ export default function ProductList() {
 
         const response = await fetch(`/api/products${query}`);
         const data = await response.json();
+        console.log(data) // Remember to remove
         
         if(data.success) {
           setProducts(data.products);
