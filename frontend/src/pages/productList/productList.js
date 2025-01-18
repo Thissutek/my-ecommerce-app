@@ -8,16 +8,17 @@ export default function ProductList() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        let query = '';
-        if(filter) {
-          query = `?type=${filter}`;
-        }
+        let query = filter ? `?type=${filter}`: '';
+        console.log('Fetching URL:', `/api/products${query}`)
 
         const response = await fetch(`/api/products${query}`);
+        console.log('Raw Response: ', response);
+
         const data = await response.json();
-        console.log(data) // Remember to remove
+        console.log('Response JSON:', data);
         
         if(data.success) {
+          console.log('Products fetched', data.products);
           setProducts(data.products);
         } else {
           console.error('Failed to fetch products');

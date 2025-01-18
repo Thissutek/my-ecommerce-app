@@ -19,7 +19,7 @@ app.use(express.json());
 // Serve static files from the React App(frontend)
 app.use(express.static(path.join(__dirname, '../frontend/build')));
 
-//Catch-all fro an route not caught by an API route
+//Catch-all from an route not caught by an API route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
 })
