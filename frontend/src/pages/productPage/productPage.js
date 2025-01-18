@@ -8,6 +8,7 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [notification, setNotification] = useState('');
 
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -61,39 +62,42 @@ export default function ProductPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto mt-40 p-6 bg-white">
-      {/* Product Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-40">
-        {/* Product Image */}
-        <div className="flex justify-center">
-          <img
-            src={`/images/${product.image}`}
-            alt={product.name}
-            className="w-full max-w-2x1 h-auto rounded-lg shadow-md object-cover"
-          />
-        </div>
+    <div>
+      <a href='/products' className='font-semibold text-2xl p-8 m-8 w-40 relative mb-10 top-2 items-center justify-center flex text-indigo-600 bg-gray-100 hover:bg-gray-200 py-2 px-4 rounded-lg shadow-md transition duration-200'>←</a>
+      <div className="max-w-6xl mx-auto mt-40 p-6 bg-white">
+      
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-40">
+          {/* Product Image */}
+          <div className="flex justify-center">
+            <img
+              src={`/images/${product.image}`}
+              alt={product.name}
+              className="w-full max-w-2x1 h-auto rounded-lg shadow-md object-cover"
+            />
+          </div>
 
-        {/* Product Info */}
-        <div className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
-          <p className="text-xl text-indigo-600 font-semibold mb-2">${product.price.toFixed(2)}</p>
-          <p className="text-gray-700 mb-6">{product.description}</p>
+          {/* Product Info */}
+          <div className="flex flex-col justify-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            <p className="text-xl text-indigo-600 font-semibold mb-2">${product.price.toFixed(2)}</p>
+            <p className="text-gray-700 mb-6">{product.description}</p>
 
-          <button 
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition"
-            onClick={handleAddToCart}
-          >
+            <button 
+              className="w-full bg-indigo-600 text-white py-3 rounded-lg shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 transition"
+              onClick={handleAddToCart}
+            >
                 Add to Cart
-          </button>
-          {/* Notification Box */}
-          {notification && (
-            <div className='fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-md'>
-              {notification}
-            </div>
-          )}
+            </button>
+            {/* Notification Box */}
+            {notification && (
+              <div className='fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-md'>
+                {notification}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
-
   );
 }
