@@ -1,8 +1,8 @@
-'use client';
-import React from 'react';
-import { useState, useEffect } from 'react';
-import {jwtDecode} from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+"use client";
+import React from "react";
+import { useState, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogPanel,
@@ -13,7 +13,7 @@ import {
   PopoverButton,
   PopoverGroup,
   PopoverPanel,
-} from '@headlessui/react';
+} from "@headlessui/react";
 import {
   ArrowPathIcon,
   Bars3Icon,
@@ -23,26 +23,52 @@ import {
   XMarkIcon,
   TagIcon,
   ShoppingBagIcon,
-  UserCircleIcon
-} from '@heroicons/react/24/outline';
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid';
-
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  PhoneIcon,
+  PlayCircleIcon,
+} from "@heroicons/react/20/solid";
 
 const products = [
-  { name: 'New Arrivals', description: 'New Seasonal Catalog', href: '/products', icon: TagIcon },
-  { name: 'Tees', description: 'Fresh Designs, Everyday Comfort. ', href: '/products', icon: CursorArrowRaysIcon },
-  { name: 'Hoodies', description: 'Hoodies for Every Mood', href: '/products', icon: FingerPrintIcon },
-  { name: 'Outerwear', description: 'Layer Up in Style', href: '/products', icon: SquaresPlusIcon },
-  { name: 'Accessories', description: 'Small Details, Big Impact', href: '/products', icon: ArrowPathIcon },
+  {
+    name: "New Arrivals",
+    description: "New Seasonal Catalog",
+    href: "/products",
+    icon: TagIcon,
+  },
+  {
+    name: "Tees",
+    description: "Fresh Designs, Everyday Comfort. ",
+    href: "/products",
+    icon: CursorArrowRaysIcon,
+  },
+  {
+    name: "Hoodies",
+    description: "Hoodies for Every Mood",
+    href: "/products",
+    icon: FingerPrintIcon,
+  },
+  {
+    name: "Outerwear",
+    description: "Layer Up in Style",
+    href: "/products",
+    icon: SquaresPlusIcon,
+  },
+  {
+    name: "Accessories",
+    description: "Small Details, Big Impact",
+    href: "/products",
+    icon: ArrowPathIcon,
+  },
 ];
 const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Support', href: '#', icon: PhoneIcon },
+  { name: "Watch demo", href: "#", icon: PlayCircleIcon },
+  { name: "Support", href: "#", icon: PhoneIcon },
 ];
 
-const profile = [
-  {name: 'Cart', href: '/cart', icon: ShoppingBagIcon },
-];
+const profile = [{ name: "Cart", href: "/cart", icon: ShoppingBagIcon }];
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,22 +77,25 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if(token) {
+    const token = localStorage.getItem("token");
+    if (token) {
       const decodedToken = jwtDecode(token);
       setUsername(decodedToken.username);
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setUsername(null);
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
-    <header className="bg-white z-50 relative">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+    <header className="bg-white z-50 relative ">
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
         <div className="flex lg:flex-1">
           <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
@@ -87,7 +116,10 @@ export default function Navbar() {
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
               Shop
-              <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" />
+              <ChevronDownIcon
+                aria-hidden="true"
+                className="h-5 w-5 flex-none text-gray-400"
+              />
             </PopoverButton>
 
             <PopoverPanel
@@ -101,10 +133,16 @@ export default function Navbar() {
                     className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
                   >
                     <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                      <item.icon aria-hidden="true" className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" />
+                      <item.icon
+                        aria-hidden="true"
+                        className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                      />
                     </div>
                     <div className="flex-auto">
-                      <a href={item.href} className="block font-semibold text-gray-900">
+                      <a
+                        href={item.href}
+                        className="block font-semibold text-gray-900"
+                      >
                         {item.name}
                         <span className="absolute inset-0" />
                       </a>
@@ -120,7 +158,10 @@ export default function Navbar() {
                     href={item.href}
                     className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
                   >
-                    <item.icon aria-hidden="true" className="h-5 w-5 flex-none text-gray-400" />
+                    <item.icon
+                      aria-hidden="true"
+                      className="h-5 w-5 flex-none text-gray-400"
+                    />
                     {item.name}
                   </a>
                 ))}
@@ -137,8 +178,15 @@ export default function Navbar() {
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {profile.map((item) => (
-            <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
-              <item.icon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+            <a
+              key={item.name}
+              href={item.href}
+              className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4"
+            >
+              <item.icon
+                aria-hidden="true"
+                className="h-5 w-5 flex-none text-gray-900"
+              />
               <span>{item.name}</span>
             </a>
           ))}
@@ -149,9 +197,15 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-3 p-4"
               >
-                <UserCircleIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+                <UserCircleIcon
+                  aria-hidden="true"
+                  className="h-5 w-5 flex-none text-gray-900"
+                />
                 <span>{username}</span>
-                <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="h-5 w-5 flex-none text-gray-900"
+                />
               </button>
 
               {/* Dropdown for log out */}
@@ -162,33 +216,43 @@ export default function Navbar() {
                       href="/profile"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                    Profile
+                      Profile
                     </a>
                     <a
                       href="/order-status"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                    Orders
+                      Orders
                     </a>
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
-                    Log Out
+                      Log Out
                     </button>
                   </div>
                 </div>
               )}
             </div>
           ) : (
-            <a href="/login" className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4">
-              <UserCircleIcon aria-hidden="true" className="h-5 w-5 flex-none text-gray-900" />
+            <a
+              href="/login"
+              className="text-sm font-semibold leading-6 text-gray-900 flex items-center space-x-2 p-4"
+            >
+              <UserCircleIcon
+                aria-hidden="true"
+                className="h-5 w-5 flex-none text-gray-900"
+              />
               <span>Log In</span>
             </a>
           )}
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
@@ -215,7 +279,10 @@ export default function Navbar() {
                 <Disclosure as="div" className="-mx-3">
                   <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
                     Product
-                    <ChevronDownIcon aria-hidden="true" className="h-5 w-5 flex-none group-data-[open]:rotate-180" />
+                    <ChevronDownIcon
+                      aria-hidden="true"
+                      className="h-5 w-5 flex-none group-data-[open]:rotate-180"
+                    />
                   </DisclosureButton>
                   <DisclosurePanel className="mt-2 space-y-2">
                     {[...products, ...callsToAction].map((item) => (
